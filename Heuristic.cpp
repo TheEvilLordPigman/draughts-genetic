@@ -88,7 +88,7 @@ std::string Heuristic::toString() {
 
 std::vector<bool> Heuristic::getChromosome() {
 	std::vector<bool> result;
-	BinConverter convert(8,3);
+	BinConverter convert(15,8);
 	for(int i=0; i<PARAM_TOTAL; i++) {
 		std::vector<bool> current = convert.decToBin(values[i]);
 		result.insert(result.end(), current.begin(), current.end());

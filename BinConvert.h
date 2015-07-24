@@ -24,6 +24,6 @@ public:
 	float binToDecFloat(std::vector<bool> bin);
 };
 
-
+void printBinString(std::vector<bool> bin);
 
 #endif /* BINCONVERT_H_ */

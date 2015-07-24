@@ -85,9 +85,7 @@ int main(int argc, char* args[]) {
 		A.setValue(HeuristicParameter(i), (rand() % 10) - 5);
 	}
 	std::vector<bool> AChrom = A.getChromosome();
-	for(int i=AChrom.size()-1; i>=0; i--) {
-		std::cout << AChrom[i];
-	}
+	//printBinString(AChrom);
 
 	Heuristic B;
 	for(int i=0; i<PARAM_TOTAL; i++) {
