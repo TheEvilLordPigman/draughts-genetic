@@ -28,13 +28,16 @@ enum HeuristicParameter {
 class Heuristic {
 private:
 	float values[PARAM_TOTAL];
-
+	int fitness;
 public:
 	Heuristic();
 	double function(Board board);
 	void setValue(HeuristicParameter param, float val);
 	std::string toString();
 	std::vector<bool> getChromosome();
+
+	int getFitness();
+	void setFitness(int fitness);
 };
 
 

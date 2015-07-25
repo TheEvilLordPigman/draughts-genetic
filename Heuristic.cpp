@@ -11,6 +11,7 @@ Heuristic::Heuristic() {
 	for(int i=0; i<PARAM_TOTAL; i++) {
 		values[i] = 0;
 	}
+	fitness = 0;
 }
 
 double Heuristic::function(Board board) {
@@ -94,4 +95,12 @@ std::vector<bool> Heuristic::getChromosome() {
 		result.insert(result.end(), current.begin(), current.end());
 	}
 	return result;
+}
+
+int Heuristic::getFitness() {
+	return fitness;
+}
+
+void Heuristic::setFitness(int fitness) {
+	this->fitness = fitness;
 }
