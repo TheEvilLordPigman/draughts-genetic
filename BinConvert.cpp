@@ -13,7 +13,6 @@ BinConverter::BinConverter(int bits, int dpIndex) {
 }
 
 std::vector<bool> BinConverter::decToBin(int dec) {
-	std::cout << bits;
 	std::vector<bool> result;
 
 	bool positive = true;

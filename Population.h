@@ -21,20 +21,22 @@ private:
 	std::vector<Heuristic> pool;
 	Heuristic control;
 	int parent1Index, parent2Index;
+	int generations;
 
 public:
-	static const int POP_SIZE = 4;
+	static const int POP_SIZE = 10;
 
 	Population(); //Create random population
 	Population(std::string fileName); //Load population from file
 
 	void assignFitness();
 	void selectParents();
-	void breed();
+	void breed(Heuristic parent1, Heuristic parent2, Heuristic* baby1, Heuristic* baby2);
+	void breedNextGen();
 
 	void printPop();
 	void printBoard(Board board);
-	int getFitness(Heuristic a);
+	int findFitness(Heuristic a);
 
 };
 

@@ -14,11 +14,16 @@
 
 int main(int argc, char* args[]) {
 	srand(time(NULL));
-
 	Population pop;
-	//pop.assignFitness();
-	//pop.selectParents();
+	pop.assignFitness();
 	pop.printPop();
+	while(true) {
+		pop.selectParents();
+		pop.breedNextGen();
+		pop.assignFitness();
+		pop.printPop();
+	}
+
 }
 
 

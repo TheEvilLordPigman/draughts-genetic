@@ -10,6 +10,7 @@
 
 #include "DraughtsModule.h"
 #include "BinConvert.h"
+#include "Utils.h"
 #include <sstream>
 
 enum HeuristicParameter {
@@ -30,11 +31,14 @@ private:
 	float values[PARAM_TOTAL];
 	int fitness;
 public:
+	static const int BITS = 16;
+	static const int DP_INDEX = 8;
 	Heuristic();
 	double function(Board board);
 	void setValue(HeuristicParameter param, float val);
 	std::string toString();
 	std::vector<bool> getChromosome();
+	void setFromChromosome(std::vector<bool> chrom);
 
 	int getFitness();
 	void setFitness(int fitness);
