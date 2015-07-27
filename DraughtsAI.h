@@ -31,13 +31,14 @@ const double PARAM_MULT[PARAM_TOTAL] = {
 };
 
 class AI {
-	private:
+	protected:
 		cellState colour;
 		int direction;
 		int searchDepth;
 		Heuristic heuristic;
 
 	public:
+		AI();
 		AI(cellState playercolour, Heuristic heur);
 		cellState getColour();
 		void setSearchDepth(int depth);
@@ -52,7 +53,7 @@ class AI {
 		std::vector<MoveSequence> getAvailableCapturesFromPoint(Board,Cell);
 
 		//Returns what the AI thinks is the optimal move given the board state
-		MoveSequence getMove(Board, int depth, bool nodeType = N_MAX);
+		virtual MoveSequence getMove(Board, int depth, bool nodeType = N_MAX);
 };
 
 #endif

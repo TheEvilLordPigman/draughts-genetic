@@ -10,11 +10,10 @@
 
 #include "Heuristic.h"
 #include "DraughtsAI.h"
+#include "RandAI.h"
 
 const bool BLACK_PLAYER = true;
 const bool WHITE_PLAYER = false;
-
-const int MAX_TURNS = 100;
 
 class Population {
 private:
@@ -25,6 +24,9 @@ private:
 
 public:
 	static const int POP_SIZE = 10;
+	static constexpr float MUTATION_RATE = 0.001;
+	static const int GAMES_PER_TEST = 3;
+	static const int MAX_TURNS = 10;
 
 	Population(); //Create random population
 	Population(std::string fileName); //Load population from file
@@ -33,6 +35,7 @@ public:
 	void selectParents();
 	void breed(Heuristic parent1, Heuristic parent2, Heuristic* baby1, Heuristic* baby2);
 	void breedNextGen();
+	void mutate();
 
 	void printPop();
 	void printBoard(Board board);

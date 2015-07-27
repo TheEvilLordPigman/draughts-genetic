@@ -5,6 +5,10 @@
 #include "DraughtsAI.h"
 #include <iostream>
 
+AI::AI() {
+
+}
+
 AI::AI(cellState playercolour, Heuristic heur) {
 	colour = playercolour;
 	if(colour == M_WHITE) {
@@ -188,11 +192,11 @@ MoveSequence AI::getMove(Board board, int depth, bool nodeType) {
 	desirabilities.reserve(movelist.size());
 	for(unsigned int i=0; i<movelist.size(); i++) {
 		if(depth == 0) {
-			desirabilities.push_back(heuristic.function(ExecuteMoveSequence(movelist[i],board)));
+			desirabilities.push_back(heuristic.function(ExecuteMoveSequence(movelist[i],board), colour));
 		}
 		else {
 			AI playersim(otherplayer(colour), heuristic);
-			desirabilities.push_back(heuristic.function(ExecuteMoveSequence(playersim.getMove(ExecuteMoveSequence(movelist[i],board),depth-1,!nodeType),board)));
+			desirabilities.push_back(heuristic.function(ExecuteMoveSequence(playersim.getMove(ExecuteMoveSequence(movelist[i],board),depth-1,!nodeType),board), colour));
 		}
 	}
 

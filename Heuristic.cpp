@@ -14,8 +14,7 @@ Heuristic::Heuristic() {
 	fitness = 0;
 }
 
-double Heuristic::function(Board board) {
-	cellState colour = M_WHITE;
+double Heuristic::function(Board board, cellState colour) {
 
 	//Initialise parameter array
 	int parameters[PARAM_TOTAL];

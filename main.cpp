@@ -20,6 +20,7 @@ int main(int argc, char* args[]) {
 	while(true) {
 		pop.selectParents();
 		pop.breedNextGen();
+		pop.mutate();
 		pop.assignFitness();
 		pop.printPop();
 	}

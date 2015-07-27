@@ -88,6 +88,20 @@ void Population::breedNextGen() {
 	generations++;
 }
 
+void Population::mutate() {
+	for(std::vector<Heuristic>::iterator itHeur = pool.begin(); itHeur != pool.end(); itHeur++) {
+		std::vector<bool> itChrom = itHeur->getChromosome();
+		for(std::vector<bool>::iterator itBit = itChrom.begin(); itBit != itChrom.end(); itBit++) {
+			float randFloat = ((float)(rand() % 1000)) / 1000;
+			if(randFloat < MUTATION_RATE) {
+				*itBit = !(*itBit);
+				std::cout << "MUTATION!" << std::endl;
+			}
+		}
+		itHeur->setFromChromosome(itChrom);
+	}
+}
+
 void Population::printPop() {
 	std::cout << "Generation " << generations << ":" << std::endl;
 	for(std::vector<Heuristic>::iterator it = pool.begin(); it != pool.end(); it++) {
@@ -115,49 +129,59 @@ void Population::printBoard(Board board) {
 }
 
 int Population::findFitness(Heuristic a) {
-	AI black(M_BLACK, control);
+	RandAI black(M_BLACK);
 	AI white(M_WHITE, a);
 	bool won = false;
 	bool turn = BLACK_PLAYER;
 
 	Board board;
-	ResetBoard(board);
-
-	int turns = 0;
-
-	while(!won && turns < MAX_TURNS) {
-		if(turn) {
-			board = ExecuteMoveSequence(black.getMove(board, SEARCH_DEPTH), board);
-			//std::cout << "Black has made a move." << std::endl;
-			//printBoard(board);
-			if(HasWon(black.getColour(), board)) {
-				won = true;
-			}
-		}
-		else {
-			board = ExecuteMoveSequence(white.getMove(board, SEARCH_DEPTH), board);
-			//std::cout << "White has made a move." << std::endl;
-			//printBoard(board);
-			if(HasWon(white.getColour(), board)) {
-				won = true;
-			}
-		}
-		turn = !turn;
-		turns++;
-	}
-
-	if(turns == MAX_TURNS) {
-		//std::cout << "Turn limit reached, white wins because racism." << std::endl;
-	}
-
 	int score = 0;
-	for(int y=0; y<8; y++) {
-		for(int x=0; x<8; x++) {
-			if(board.cells[y][x] == M_WHITE) {
-				score += 1;
+
+	for(int i=0; i<GAMES_PER_TEST; i++) {
+		ResetBoard(board);
+
+		int turns = 0;
+
+		while(!won && turns < MAX_TURNS) {
+			if(turn) {
+				board = ExecuteMoveSequence(black.getMove(board, SEARCH_DEPTH), board);
+				//std::cout << "Black has made a move." << std::endl;
+				//printBoard(board);
+				if(HasWon(black.getColour(), board)) {
+					won = true;
+				}
 			}
-			else if(board.cells[y][x] == K_WHITE) {
-				score += 2;
+			else {
+				board = ExecuteMoveSequence(white.getMove(board, SEARCH_DEPTH), board);
+				//std::cout << "White has made a move." << std::endl;
+				//printBoard(board);
+				if(HasWon(white.getColour(), board)) {
+					won = true;
+				}
+			}
+			turn = !turn;
+			turns++;
+		}
+
+		if(turns == MAX_TURNS) {
+			//std::cout << "Turn limit reached, white wins because racism." << std::endl;
+		}
+
+
+		for(int y=0; y<8; y++) {
+			for(int x=0; x<8; x++) {
+				if(board.cells[y][x] == M_WHITE) {
+					score += 1;
+				}
+				else if(board.cells[y][x] == K_WHITE) {
+					score += 2;
+				}
+				else if(board.cells[y][x] == M_BLACK) {
+					score -= 1;
+				}
+				else if(board.cells[y][x] == K_BLACK) {
+					score -= 2;
+				}
 			}
 		}
 	}

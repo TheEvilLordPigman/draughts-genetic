@@ -34,7 +34,7 @@ public:
 	static const int BITS = 16;
 	static const int DP_INDEX = 8;
 	Heuristic();
-	double function(Board board);
+	double function(Board board, cellState colour);
 	void setValue(HeuristicParameter param, float val);
 	std::string toString();
 	std::vector<bool> getChromosome();
