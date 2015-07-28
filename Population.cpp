@@ -17,18 +17,20 @@ Population::Population() {
 
 	for(int i=0; i<POP_SIZE; i++) {
 		pool.push_back(Heuristic());
-		for(int j=0; j<PARAM_TOTAL; j++) {
-			pool[i].setValue(HeuristicParameter(j), (rand() % 30) - 15);
+		std::vector<bool> randChrom;
+		for(int j=0; j<pool[i].BITS*PARAM_TOTAL; j++) {
+			randChrom.push_back(rand() % 2);
 		}
+		pool[i].setFromChromosome(randChrom);
 	}
 
 	control.setValue(PARAM_MEN, 			1.0);
 	control.setValue(PARAM_KINGS, 			2.0);
-	control.setValue(PARAM_ENEMY_MEN, 		-1.0);
-	control.setValue(PARAM_ENEMY_KINGS, 	-2.0);
+	control.setValue(PARAM_ENEMY_MEN, 		1.0);
+	control.setValue(PARAM_ENEMY_KINGS, 	2.0);
 	control.setValue(PARAM_SAFE_MEN, 		0.25);
 	control.setValue(PARAM_SAFE_KINGS, 		0.5);
-	control.setValue(PARAM_MEN_DIST, 		-0.001);
+	control.setValue(PARAM_MEN_DIST, 		0.001);
 	control.setValue(PARAM_PROMOTION_SPACE, 0.5);
 	control.setValue(PARAM_WIN, 			10);
 }
@@ -43,7 +45,7 @@ void Population::selectParents() {
 	std::vector<int> ballot;
 
 	for(unsigned int i=0; i<pool.size(); i++) {
-		for(int j=0; j<pool[i].getFitness(); j++) {
+		for(int j=0; j<pool[i].getFitness()*pool[i].getFitness(); j++) {
 			ballot.push_back(i);
 		}
 	}
@@ -54,6 +56,11 @@ void Population::selectParents() {
 	}
 }
 void Population::breed(Heuristic parent1, Heuristic parent2, Heuristic* baby1, Heuristic* baby2) {
+	if((((float)(rand() % 100)) / 100) < CROSSOVER_RATE) {
+		*baby1 = parent1;
+		*baby2 = parent2;
+	}
+	else {
 		std::vector<bool> parent1Chrom = parent1.getChromosome();
 		std::vector<bool> parent2Chrom = parent2.getChromosome();
 		int swapPoint = rand() % parent1Chrom.size();
@@ -72,6 +79,7 @@ void Population::breed(Heuristic parent1, Heuristic parent2, Heuristic* baby1, H
 
 		baby1->setFromChromosome(baby1Chrom);
 		baby2->setFromChromosome(baby2Chrom);
+	}
 }
 void Population::breedNextGen() {
 	std::vector<Heuristic> newPool;
@@ -104,9 +112,13 @@ void Population::mutate() {
 
 void Population::printPop() {
 	std::cout << "Generation " << generations << ":" << std::endl;
+	float mean = 0;
 	for(std::vector<Heuristic>::iterator it = pool.begin(); it != pool.end(); it++) {
 		std::cout << it->toString() << " - " << it->getFitness() << std::endl;
+		mean += it->getFitness();
 	}
+	mean /= pool.size();
+	std::cout << "Mean fitness: " << mean << std::endl;
 }
 
 void Population::printBoard(Board board) {
@@ -129,7 +141,7 @@ void Population::printBoard(Board board) {
 }
 
 int Population::findFitness(Heuristic a) {
-	RandAI black(M_BLACK);
+	AI black(M_BLACK, control);
 	AI white(M_WHITE, a);
 	bool won = false;
 	bool turn = BLACK_PLAYER;
@@ -164,27 +176,29 @@ int Population::findFitness(Heuristic a) {
 		}
 
 		if(turns == MAX_TURNS) {
-			//std::cout << "Turn limit reached, white wins because racism." << std::endl;
+			std::cout << "Turn limit reached, white wins because racism." << std::endl;
 		}
 
 
 		for(int y=0; y<8; y++) {
 			for(int x=0; x<8; x++) {
 				if(board.cells[y][x] == M_WHITE) {
-					score += 1;
-				}
-				else if(board.cells[y][x] == K_WHITE) {
 					score += 2;
 				}
-				else if(board.cells[y][x] == M_BLACK) {
-					score -= 1;
+				else if(board.cells[y][x] == K_WHITE) {
+					score += 4;
 				}
-				else if(board.cells[y][x] == K_BLACK) {
-					score -= 2;
-				}
+//				else if(board.cells[y][x] == M_BLACK) {
+//					score -= 1;
+//				}
+//				else if(board.cells[y][x] == K_BLACK) {
+//					score -= 2;
+//				}
 			}
 		}
 	}
-
+	if(score < 1) {
+		score = 1;
+	}
 	return score;
 }

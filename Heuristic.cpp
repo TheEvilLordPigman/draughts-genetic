@@ -31,10 +31,10 @@ double Heuristic::function(Board board, cellState colour) {
 					parameters[PARAM_SAFE_MEN] += 1;
 				}
 				if(colour == M_WHITE) {
-					parameters[PARAM_MEN_DIST] += BOARD_HEIGHT-y;
+					parameters[PARAM_MEN_DIST] -= BOARD_HEIGHT-y;
 				}
 				else {
-					parameters[PARAM_MEN_DIST] += y;
+					parameters[PARAM_MEN_DIST] -= y;
 				}
 			}
 			else if(board.cells[y][x] == colour+1) {
@@ -44,10 +44,10 @@ double Heuristic::function(Board board, cellState colour) {
 				}
 			}
 			else if(board.cells[y][x] == otherplayer(colour)) {
-				parameters[PARAM_ENEMY_MEN] += 1;
+				parameters[PARAM_ENEMY_MEN] -= 1;
 			}
 			else if(board.cells[y][x] == otherplayer(colour) + 1) {
-				parameters[PARAM_ENEMY_KINGS] += 1;
+				parameters[PARAM_ENEMY_KINGS] -= 1;
 			}
 			else if(x % 2 == 0) {
 				if(colour == M_WHITE && y == BOARD_HEIGHT-1) {
@@ -88,7 +88,7 @@ std::string Heuristic::toString() {
 
 std::vector<bool> Heuristic::getChromosome() {
 	std::vector<bool> result;
-	BinConverter convert(BITS-1,DP_INDEX);
+	BinConverter convert(BITS,DP_INDEX);
 	for(int i=0; i<PARAM_TOTAL; i++) {
 		std::vector<bool> current = convert.decToBin(values[i]);
 		result.insert(result.end(), current.begin(), current.end());

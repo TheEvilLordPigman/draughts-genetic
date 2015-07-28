@@ -23,10 +23,11 @@ private:
 	int generations;
 
 public:
-	static const int POP_SIZE = 10;
-	static constexpr float MUTATION_RATE = 0.001;
-	static const int GAMES_PER_TEST = 3;
-	static const int MAX_TURNS = 10;
+	static const int POP_SIZE = 2;
+	static constexpr float MUTATION_RATE = 0.01;
+	static constexpr float CROSSOVER_RATE = 0.7;
+	static const int GAMES_PER_TEST = 1;
+	static const int MAX_TURNS = 50;
 
 	Population(); //Create random population
 	Population(std::string fileName); //Load population from file

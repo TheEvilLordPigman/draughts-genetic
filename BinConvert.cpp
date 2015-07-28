@@ -8,7 +8,7 @@
 #include "BinConvert.h"
 
 BinConverter::BinConverter(int bits, int dpIndex) {
-	this->bits = bits+1;
+	this->bits = bits;
 	this->dpIndex = dpIndex;
 }
 
@@ -17,21 +17,21 @@ std::vector<bool> BinConverter::decToBin(int dec) {
 
 	bool positive = true;
 	int currentDec = dec;
-	if(dec < 0) {
-		//Add a sign bit
-		positive = false;
-		currentDec *= -1;
-	} else {
-		positive = true;
-	}
+//	if(dec < 0) {
+//		//Add a sign bit
+//		positive = false;
+//		currentDec *= -1;
+//	} else {
+//		positive = true;
+//	}
 
 	while(currentDec != 0) {
 		result.push_back(currentDec % 2);
 		//std::cout << currentDec << std::endl;
 		currentDec /= 2;
 	}
-	if(result.size() < bits-1) {
-		unsigned int numZeroes = bits-result.size()-1;
+	if(result.size() < bits) {
+		unsigned int numZeroes = bits-result.size();
 		for(unsigned int i=0; i<numZeroes; i++) {
 			//std::cout << i << ": ";
 			result.push_back(0);
@@ -39,12 +39,12 @@ std::vector<bool> BinConverter::decToBin(int dec) {
 			//std::cout << "bits-size = " << bits-result.size()-1 << std::endl;
 		}
 	}
-	if(positive) {
-		result.push_back(0);
-	}
-	else {
-		result.push_back(1);
-	}
+//	if(positive) {
+//		result.push_back(0);
+//	}
+//	else {
+//		result.push_back(1);
+//	}
 	return result;
 }
 
@@ -74,23 +74,23 @@ std::vector<bool> BinConverter::decToBin(float dec) {
 
 int BinConverter::binToDecInt(std::vector<bool> bin) {
 	int result = 0;
-	for(unsigned int i=0; i<bin.size()-1; i++) {
+	for(unsigned int i=0; i<bin.size(); i++) {
 		result += pow(2, i) * bin[i];
 	}
-	if(*bin.end() == 1) {
-		result *= -1;
-	}
+//	if(*bin.end() == 1) {
+//		result *= -1;
+//	}
 	return result;
 }
 
 float BinConverter::binToDecFloat(std::vector<bool> bin) {
 	float result = 0;
-	for(int i=-dpIndex; i<bits-dpIndex-1; i++) {
+	for(int i=-dpIndex; i<bits-dpIndex; i++) {
 		result += pow(2, i) * bin[i+dpIndex];
 	}
-	if(*bin.end() == 1) {
-		result *= -1;
-	}
+//	if(*bin.end() == 1) {
+//		result *= -1;
+//	}
 	return result;
 }
 
