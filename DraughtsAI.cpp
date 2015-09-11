@@ -9,6 +9,21 @@ AI::AI() {
 
 }
 
+AI::AI(cellState playercolour) {
+	colour = playercolour;
+	if(colour == M_WHITE) {
+		direction = 1;
+	} else {
+		direction = -1;
+	}
+
+	searchDepth = 0;
+	
+	for(int i=0; i<PARAM_TOTAL; i++) {
+		heuristic.setValue(HeuristicParameter(i), PARAM_MULT[i]);
+	}
+}
+
 AI::AI(cellState playercolour, Heuristic heur) {
 	colour = playercolour;
 	if(colour == M_WHITE) {
@@ -185,7 +200,9 @@ std::vector<MoveSequence> AI::getAvailableCapturesFromPoint(Board board, Cell ce
 //	return result;
 //}
 
-MoveSequence AI::getMove(Board board, int depth, bool nodeType) {
+MoveSequence AI::getMove(Board board, int depth, bool nodeType, double a, double b) {
+	double alpha = a;
+	double beta = b;
 	std::vector<MoveSequence> movelist;
 	movelist = getAvailableMoves(board);
 	std::vector<double> desirabilities;
@@ -196,25 +213,39 @@ MoveSequence AI::getMove(Board board, int depth, bool nodeType) {
 		}
 		else {
 			AI playersim(otherplayer(colour), heuristic);
-			desirabilities.push_back(heuristic.function(ExecuteMoveSequence(playersim.getMove(ExecuteMoveSequence(movelist[i],board),depth-1,!nodeType),board), colour));
+			desirabilities.push_back(heuristic.function(ExecuteMoveSequence(playersim.getMove(ExecuteMoveSequence(movelist[i],board),depth-1,!nodeType,alpha,beta),board), colour));
+		}
+		if(nodeType == N_MIN) {
+			if(desirabilities[i] < beta) {
+				beta = desirabilities[i];
+			}
+		}
+		else {
+			if(desirabilities[i] > alpha) {
+				alpha = desirabilities[i];
+			}
+		}
+		if(alpha > beta) {
+			break;
 		}
 	}
 
 	int bestindex = 0;
 	
-	double maxmin = 0.0;
 	if(nodeType == N_MAX) {
+		double max = -1000000000;
 		for(unsigned int i=0; i<desirabilities.size(); i++) {
-			if(desirabilities[i] > maxmin) {
-				maxmin = desirabilities[i];
+			if(desirabilities[i] > max) {
+				max = desirabilities[i];
 				bestindex = i;
 			}
 		}
 	}
 	if(nodeType == N_MIN) {
+		double min = 1000000000;
 		for(unsigned int i=0; i<desirabilities.size(); i++) {
-			if(desirabilities[i] < maxmin) {
-				maxmin = desirabilities[i];
+			if(desirabilities[i] < min) {
+				min = desirabilities[i];
 				bestindex = i;
 			}
 		}	

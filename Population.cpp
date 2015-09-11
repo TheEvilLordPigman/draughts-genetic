@@ -33,6 +33,7 @@ Population::Population() {
 	control.setValue(PARAM_MEN_DIST, 		0.001);
 	control.setValue(PARAM_PROMOTION_SPACE, 0.5);
 	control.setValue(PARAM_WIN, 			10);
+	pool.push_back(control);
 }
 
 void Population::assignFitness() {
@@ -175,9 +176,9 @@ int Population::findFitness(Heuristic a) {
 			turns++;
 		}
 
-		if(turns == MAX_TURNS) {
-			std::cout << "Turn limit reached, white wins because racism." << std::endl;
-		}
+//		if(turns == MAX_TURNS) {
+//			std::cout << "Turn limit reached." << std::endl;
+//		}
 
 
 		for(int y=0; y<8; y++) {

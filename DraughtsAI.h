@@ -39,6 +39,7 @@ class AI {
 
 	public:
 		AI();
+		AI(cellState playercolour);
 		AI(cellState playercolour, Heuristic heur);
 		cellState getColour();
 		void setSearchDepth(int depth);
@@ -53,7 +54,7 @@ class AI {
 		std::vector<MoveSequence> getAvailableCapturesFromPoint(Board,Cell);
 
 		//Returns what the AI thinks is the optimal move given the board state
-		virtual MoveSequence getMove(Board, int depth, bool nodeType = N_MAX);
+		virtual MoveSequence getMove(Board, int depth, bool nodeType = N_MAX, double a = -100000000, double b = 100000000);
 };
 
 #endif

@@ -23,8 +23,8 @@ private:
 	int generations;
 
 public:
-	static const int POP_SIZE = 2;
-	static constexpr float MUTATION_RATE = 0.01;
+	static const int POP_SIZE = 10;
+	static constexpr float MUTATION_RATE = 0.001;
 	static constexpr float CROSSOVER_RATE = 0.7;
 	static const int GAMES_PER_TEST = 1;
 	static const int MAX_TURNS = 50;

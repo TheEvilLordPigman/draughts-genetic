@@ -37,6 +37,7 @@ public:
 	double function(Board board, cellState colour);
 	void setValue(HeuristicParameter param, float val);
 	std::string toString();
+
 	std::vector<bool> getChromosome();
 	void setFromChromosome(std::vector<bool> chrom);
 
